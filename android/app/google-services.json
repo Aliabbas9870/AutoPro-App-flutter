@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "803479690583",
+    "project_id": "autopro-app-flutter",
+    "storage_bucket": "autopro-app-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803479690583:android:ecafadb97b176849533212",
+        "android_client_info": {
+          "package_name": "com.example.autoprocfinal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcP1kDvi9oTJwNvaIJdNo-uxoo3p377-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
