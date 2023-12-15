@@ -72,7 +72,7 @@ class AddAdres extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text("Block No."),
+                    Text("State"),
                     Container(
                       width: 148,
                       child: TextField(

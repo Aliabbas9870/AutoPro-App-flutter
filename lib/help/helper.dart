@@ -9,6 +9,27 @@ import 'dart:ui';
 
 
 
+
+
+// CSCPicker(
+//               onCountryChanged: (value) {
+//       			setState(() {
+//       				//	countryValue = value;
+//       				});
+//                   },
+//                   onStateChanged:(value) {
+//                       setState(() {
+//       					//stateValue = value;
+//       				});
+//                   },
+//                   onCityChanged:(value) {
+//                   setState(() {
+//                     //  cityValue = value;
+//       			});
+//       		},
+//           ),
+
+
 class CountryDropdown extends StatefulWidget {
   @override
   _CountryDropdownState createState() => _CountryDropdownState();

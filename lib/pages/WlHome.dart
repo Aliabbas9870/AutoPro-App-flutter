@@ -1,3 +1,7 @@
+
+import 'package:autoprocfinal/pages/SettingPage.dart';
+import 'package:autoprocfinal/pages/mainHomePage.dart';
+import 'package:autoprocfinal/pages/Cart_Message_accountPage.dart';
 import 'package:flutter/material.dart';
 
 class HomeWel extends StatefulWidget {
@@ -9,67 +13,20 @@ class HomeWel extends StatefulWidget {
 
 class _HomeWelState extends State<HomeWel> {
   int _currentIndex = 0;
-
-  // List of widgets or pages for each navigation item
-  final List<Widget> _pages = [
-    //Add your pages/widgets here
-    // PageOne(),
-    // PageTwo(),
-    // PageThree(),
+    final List<Widget> _pages = [
+    HomeScreen(),
+    CartScreen(),
+    MessagesScreen(),
+    AccountsScreen(),
+    SettingPage(),
+    // Add more screens as needed
   ];
+
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.only(top: 22.0, right: 26, left: 26),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 33,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Welcome!",
-                      style: TextStyle(
-                          fontSize: 23,
-                          color: Color(0xff4537DD),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      color: Colors.black,
-                      icon: Icon(Icons.search),
-                    ),
-                  ],
-                ),
-                Expanded(
-                    child: Container(
-                  color: Colors.blueAccent,
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            color: Colors.grey,
-                          ),
-                          Container(
-                            color: Colors.yellow,
-                          ),
-                        ],
-                      ),
-                      Container(
-                        color: Colors.green,
-                      )
-                    ],
-                  ),
-                )),
-              ],
-            ),
-          ),
-        ),
+        body:_pages[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) {

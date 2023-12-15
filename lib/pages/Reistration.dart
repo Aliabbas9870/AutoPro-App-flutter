@@ -1,8 +1,64 @@
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:autoprocfinal/pages/add_country_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-class RegisterPage extends StatelessWidget {
+import 'package:cloud_firestore/cloud_firestore.dart';
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+   
+  TextEditingController userController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController cfpassController = TextEditingController();
+
+  final GlobalKey<FormState> _formeKey = GlobalKey<FormState>();
+//////////////////
+  ///
+  ///
+  void _submitForm() {
+    if (_formeKey.currentState!.validate()) {
+      ScaffoldMessenger.of(_formeKey.currentContext!).showSnackBar(
+          const SnackBar(content: Text("Form Successful Submit")));
+    }
+  }
+
+///////////
+  ///
+  ///
+  String? _validateEmail(value) {
+    if (value!.isEmpty) {
+      return "Please Enter Email";
+    }
+    RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}');
+    if (!emailRegExp.hasMatch(value)) {
+      return "please Enter Valid Email";
+    }
+    return null;
+  }
+
+///////////////
+  ///
+  ///
+  ///
+  String? _validPhone(value) {
+    if (value!.isEmpty) {
+      return "Please Enter a Phone Number ";
+    }
+    if (value.length != 11) {
+      return "Please Enter 11 Digits";
+    }
+    return null;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +98,25 @@ class RegisterPage extends StatelessWidget {
             width: 360,
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 12),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        label: Text("Full Name"),
-                        hintText: "Enter Your Full Name",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(47))),
+                Form(
+                  key: _formeKey,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12.0, right: 12),
+                    child: TextFormField(
+                      controller: userController,
+                      keyboardType: TextInputType.name,
+                       validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please Enter Name";
+                      }
+                      return null;
+                    },
+                      decoration: InputDecoration(
+                          label: Text("Full Name"),
+                          hintText: "Enter Your Full Name",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(47))),
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -58,6 +125,11 @@ class RegisterPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
+                     keyboardType: TextInputType.emailAddress,
+                    validator: _validateEmail,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: emailController,
+                   
                     decoration: InputDecoration(
                         label: Text("Email-Address"),
                         hintText: 'Enter Your Email',
@@ -71,6 +143,13 @@ class RegisterPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please Enter Password";
+                      }
+                      return null;
+                    },
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                         label: Text("Password"),
@@ -85,7 +164,9 @@ class RegisterPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
+                    controller: cfpassController,
                     obscureText: true,
+                    keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                         label: Text("Confirm Password"),
                         hintText: 'Confirm your Password',
@@ -96,27 +177,65 @@ class RegisterPage extends StatelessWidget {
                 SizedBox(
                   height: 42,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 52.0),
-                  child: Container(
-                      width: 305,
-                      color: Color(0xff4537DD),
-                      child: TextButton(
-                          onPressed: () {},
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterPage()));
-                            },
-                            child: Text("Register",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                          ))),
-                ),
+                ElevatedButton(
+                    onPressed: () {
+                      var username = userController.text.trim();
+                      var useremail = emailController.text.trim();
+                      var userpass = passwordController.text.trim();
+                      var usercfpass = cfpassController.text.trim();
+                      FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                              email: useremail, password: userpass)
+                          .then((value) => {
+                          print(username),
+                           print(userpass),
+                            print(useremail),
+                          FirebaseFirestore.instance.collection('UsersRegister').doc().set({
+                            'username':username,
+                            'useremail':useremail,
+                            'userpass':userpass,
+                            'usercfpass':usercfpass
+                          }),
+
+                  
+                                // print("Created Users Register"),
+                              });
+                              
+                    },
+                    child: Text("Register")),
+                // Padding(
+                //   padding: const EdgeInsets.only(bottom: 52.0),
+                //   child: Container(
+                //       width: 305,
+                //       color: Color(0xff4537DD),
+                //       child: TextButton(
+                //           onPressed: () {},
+                //           child: InkWell(
+                //             onTap: () {
+                //               // var username = userController.text.trim();
+                //               // var useremail = emailController.text.trim();
+                //               // var userpass = passwordController.text.trim();
+                //               // var usercfpass = cfpassController.text.trim();
+                //               // FirebaseAuth.instance
+                //               //     .createUserWithEmailAndPassword(
+                //               //         email: useremail, password: userpass ).then((value) => {
+
+                //               //         print("Created Users Register"),
+                //               //         log('users')
+                //               //         });
+
+                //               // Navigator.push(
+                //               //     context,
+                //               //     MaterialPageRoute(
+                //               //         builder: (context) => RegisterPage()));
+                //             },
+                //             child: Text("Register",
+                //                 style: TextStyle(
+                //                     fontSize: 16,
+                //                     color: Colors.white,
+                //                     fontWeight: FontWeight.bold)),
+                //           ))),
+                // ),
                 SizedBox(
                   height: 2,
                 ),
@@ -125,10 +244,12 @@ class RegisterPage extends StatelessWidget {
                   children: [
                     Text("Already have an account ?"),
                     TextButton(
-                        onPressed: () {Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginPage()));},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
+                        },
                         child: Text(
                           " Sign in",
                           style: TextStyle(color: Colors.blue),
@@ -144,16 +265,13 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-
-
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       extendBodyBehindAppBar: true,
-
+      extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
         child: Column(children: [
           SizedBox(
@@ -168,19 +286,17 @@ class LoginPage extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ))),
           ),
-          
           SizedBox(
             height: 32,
           ),
           Container(
             width: 280,
-            child: Image.asset('assets/autopro/login.png'),),
+            child: Image.asset('assets/autopro/login.png'),
+          ),
           Container(
             width: 360,
             child: Column(
               children: [
-                
-                
                 SizedBox(
                   height: 12,
                 ),
@@ -208,7 +324,6 @@ class LoginPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(47))),
                   ),
                 ),
-               
                 SizedBox(
                   height: 42,
                 ),
@@ -241,10 +356,12 @@ class LoginPage extends StatelessWidget {
                   children: [
                     Text("Don’t have an account ?"),
                     TextButton(
-                        onPressed: () {Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterPage()));},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()));
+                        },
                         child: Text(
                           " Sign Up",
                           style: TextStyle(color: Colors.blue),
@@ -259,5 +376,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-

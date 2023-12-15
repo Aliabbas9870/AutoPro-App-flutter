@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:autoprocfinal/pages/WlHome.dart';
 import 'package:flutter/material.dart';
 
@@ -26,12 +27,38 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 12,),
-              Padding(
-                padding: const EdgeInsets.only(left:22.0,right: 22,top: 55),
-                child: Text(
-                    "Welcome to AutoPro ! We're thrilled to have you on board. Your seamless shopping experience begins now. Happy shopping, and don't hesitate to reach out if you need any assistance along the way. We're here to make your shopping journey a breeze!"),
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(left:22.0,right: 22,top: 55),
+                  // child:  AnimatedTextKit(
+                  //     animatedTexts: [
+                  //       TyperAnimatedText('Welcome to AutoPro !'),
+                  //       TyperAnimatedText('We are thrilled to have you on board.Your seamless shopping experience begins now. Happy shopping, and dont hesitate to reach out if you need any assistance along the way. We are here to make your shopping journey a breeze!'),
+                       
+                  //     ],
+                  //     // onTap: () {
+                  //     //   print("Tap Event");
+                  //     // },
+                  //   ),
+                   child: Text(
+                      "Welcome to AutoPro ! We're thrilled to have you on board. Your seamless shopping experience begins now. Happy shopping, and don't hesitate to reach out if you need any assistance along the way. We're here to make your shopping journey a breeze!"),
+                ),
               ),
                   
+
+    //  AnimatedTextKit(
+    //   animatedTexts: [
+    //     TyperAnimatedText('Welcome to AutoPro !'),
+    //     TyperAnimatedText('We are thrilled to have you on board.Your seamless shopping experience begins now. Happy shopping, and dont hesitate to reach out if you need any assistance along the way. We are here to make your shopping journey a breeze!'),
+       
+    //   ],
+    //   // onTap: () {
+    //   //   print("Tap Event");
+    //   // },
+    // ),
+
+
+
                   SizedBox(height: 59,),
                    Container(
                 width: 260,

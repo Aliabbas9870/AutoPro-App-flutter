@@ -1,9 +1,22 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
+
+
 import 'dart:async';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:autoprocfinal/help/allhomeNav.dart';
 import 'package:autoprocfinal/pages/Page_start.dart';
+import 'package:autoprocfinal/pages/WlHome.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -37,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Simulate a delay to show the splash screen for a few seconds
-    Timer(Duration(seconds: 10), () {
+    Timer(Duration(seconds: 3), () {
       // Navigate to the main screen after the splash screen
       Navigator.pushReplacement(
         context,
@@ -82,7 +95,7 @@ class _purpleScreenState extends State<purpleScreen> {
   void initState() {
     super.initState();
     // Simulate a delay to show the splash screen for a few seconds
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 2), () {
       // Navigate to the main screen after the splash screen
       Navigator.pushReplacement(
         context,
