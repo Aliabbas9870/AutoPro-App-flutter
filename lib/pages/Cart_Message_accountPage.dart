@@ -1,4 +1,5 @@
 import 'package:autoprocfinal/help/addNavigate.dart';
+import 'package:autoprocfinal/pages/RatingReviewPage.dart';
 import 'package:autoprocfinal/pages/SettingPage.dart';
 import 'package:autoprocfinal/pages/allScreenPage.dart';
 import 'package:flutter/material.dart';
@@ -241,15 +242,20 @@ class AccountsScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
           actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingPage()));
-                },
-                icon: Icon(
-                  Icons.settings,
-                  size: 36,
-                  color: Colors.white10,
-                ))
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                highlightColor: Colors.black,
+                hoverColor: Colors.red,
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingPage()));
+                  },
+                  icon: Icon(
+                    Icons.settings,
+                    size: 36,
+                    color: Colors.white,
+                  )),
+            )
           ]),
       body: SingleChildScrollView(
         child: Column(
@@ -260,9 +266,10 @@ class AccountsScreen extends StatelessWidget {
               height: 152,
               child: CircleAvatar(
                 backgroundColor: Colors.white,
+            backgroundImage: AssetImage('assets/autopro/aliabbas.png'),
                 child: Center(
                   child: Text(
-                    'Auto ',
+                    ' ',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 30,
@@ -463,18 +470,23 @@ class AccountsScreen extends StatelessWidget {
                             children: [
                               Column(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.message),
-                                      SizedBox(
-                                        width: 12,
-                                      ),
-                                      Text(
-                                        "My Messeges",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MessagePage()));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.message),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(
+                                          "My Messeges",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -504,18 +516,28 @@ class AccountsScreen extends StatelessWidget {
                             children: [
                               Column(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.reviews_outlined),
-                                      SizedBox(
-                                        width: 12,
-                                      ),
-                                      Text(
-                                        "My Reviews",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
+                                  GestureDetector(
+                                    onTap: (){
+
+                                        Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              RatingReviewPage()));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.reviews_outlined),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(
+                                          "My Reviews",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),

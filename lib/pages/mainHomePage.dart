@@ -1,10 +1,16 @@
+import 'package:autoprocfinal/pages/BottonNavBar.dart';
 import 'package:autoprocfinal/pages/Cart_Message_accountPage.dart';
 import 'package:flutter/material.dart';
 
 
 
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Welcome!",
+                      "Welcome",
                       style: TextStyle(
                           fontSize: 23,
                           color: Color(0xff4537DD),
@@ -64,20 +70,25 @@ class HomeScreen extends StatelessWidget {
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(11),
-                                        color: Color(0xffD9D9D9),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Text(
-                                          "Complete protection of your car",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context,MaterialPageRoute(builder:(context)=>BottomNavPage()));
+                                    },
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(11),
+                                          color: Color(0xffD9D9D9),
                                         ),
-                                      )),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Text(
+                                            "Complete protection of your car",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )),
+                                  ),
                                   Row(
                                     children: [
                                       Container(

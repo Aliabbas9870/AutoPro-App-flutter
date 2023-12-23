@@ -1,9 +1,34 @@
 import 'package:autoprocfinal/pages/EditProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
-class PersonalPage extends StatelessWidget {
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
 
+  @override
+  State<PersonalPage> createState() => _PersonalPageState();
+}
+
+class _PersonalPageState extends State<PersonalPage> {
+  void getCurrentPosition() async{
+    LocationPermission permission=await Geolocator.checkPermission();
+    if(permission ==LocationPermission.denied || permission==LocationPermission.deniedForever){
+      print("Premission not gave");
+      LocationPermission asked=await Geolocator.requestPermission();
+    }
+    else{
+      Position currentPosition= await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      print("Logitude:"+currentPosition.latitude.toString());
+      print("Logitude:"+currentPosition.accuracy.toString());
+      print("Logitude:"+currentPosition.altitudeAccuracy.toString());
+        print("Logitude:"+currentPosition.floor.toString());
+      print("Logitude:"+currentPosition.speedAccuracy.toString());
+      print("Logitude:"+currentPosition.speed.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +58,7 @@ class PersonalPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditProfile()));
+                          builder: (context) => EditProfileScreen(initialEmail: 'aliab@gmail.com', initialUsername: 'aliabbas', initialNumber: '03251806654',)));
                     },
                     child: Text(
                       "Edit",
@@ -115,13 +140,22 @@ class PersonalPage extends StatelessWidget {
                                 padding: const EdgeInsets.only(right:63.0,left: 33,top: 6),
                                 child: Text("******************",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
                               ),
-                              //SizedBox(height: 12,),
-                                            
+                              SizedBox(height: 12,),
+                              Container(
+                                height: 33,
+                                width: 122,
+                                decoration: BoxDecoration(
+                                  
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Color(0xff4538DD)),
+                                child: TextButton(onPressed: getCurrentPosition, child: Text("Your Current Location)",style: TextStyle(color: Colors.white),)))
+                               
                                             
                           ],
                         ),
                       ),
                     ),
+
                   ),
                 ),
                 

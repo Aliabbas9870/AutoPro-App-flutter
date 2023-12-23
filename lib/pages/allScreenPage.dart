@@ -400,3 +400,116 @@ class _MyCancelState extends State<MyCancel> {
         ));
   }
 }
+
+
+
+class Contact {
+  String name;
+  String phoneNumber;
+  IconData icon;
+  String number;
+
+  // ignore: non_constant_identifier_names
+  Contact({
+    required this.name,
+    required this.phoneNumber,
+    required this.icon,
+    required this.number,
+  });
+}
+
+
+class MessagePage extends StatelessWidget {
+  const MessagePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+  final List<Contact> contacts = [
+
+ Contact(
+      
+      name: 'Ali Abbas',
+      phoneNumber: '+92-315-6654',
+      icon: Icons.person,
+      number: '1',
+    ),
+     Contact(
+      name: 'Ali ',
+      phoneNumber: '9235454545',
+      icon: Icons.group,
+      number: '2',
+    ),
+    Contact(
+      name: 'Ali Dil',
+      phoneNumber: '9235454545',
+      icon: Icons.person,
+      number: '2',
+    ),
+     Contact(
+      
+      name: 'Ali R',
+      phoneNumber: '+92-315-6654',
+      icon: Icons.person,
+      number: '1',
+    ),
+     Contact(
+      name: 'RR ',
+      phoneNumber: '9235454545',
+      icon: Icons.group,
+      number: '2',
+    ),
+    Contact(
+      name: 'Ali Dil',
+      phoneNumber: '9235454545',
+      icon: Icons.person,
+      number: '2',
+    ),
+
+
+    Contact(
+      
+      name: 'Ali Abbas',
+      phoneNumber: '+92-315-6654',
+      icon: Icons.person,
+      number: '1',
+    ),
+     Contact(
+      name: ' R',
+      phoneNumber: '9235454545',
+      icon: Icons.group,
+      number: '2',
+    ),
+     
+    // Add more contacts as needed
+  ];
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Messages"),
+      ),
+      body:ListView.builder(
+          itemCount: contacts.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+               leading: CircleAvatar(child: Icon(contacts[index].icon)),
+              title: GestureDetector(
+                onTap: (){},
+                child: Text(contacts[index].name)),
+              subtitle: Text(contacts[index].phoneNumber),
+              trailing: CircleAvatar(child: Text(contacts[index].number)),
+
+              // You can add more customization or functionality here
+            );
+          },
+        ),
+
+
+    );
+  }
+}
+
+
+
+
+
+
+

@@ -49,7 +49,11 @@ class StartPage extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 52.0),
               child: Container(
                   width: 305,
-                  color: Color(0xff4537DD),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Color(0xff4537DD),
+                  ),
+                  
                   child: TextButton(
                       onPressed: () {},
                       child: InkWell(

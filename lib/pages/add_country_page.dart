@@ -127,6 +127,7 @@ class _selectCountryState extends State<selectCountry> {
                 width: 200,
                 decoration: BoxDecoration(
                   color: Color(0xff4537DD),
+                  borderRadius: BorderRadius.circular(12)
                 ),
                 child: TextButton(onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>AddressI()));

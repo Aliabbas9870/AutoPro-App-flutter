@@ -1,6 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-
-
+import 'package:autoprocfinal/localization/locals.dart';
+import 'package:autoprocfinal/pages/Reistration.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_localization/flutter_localization.dart';
+import 'package:location/location.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:autoprocfinal/help/allhomeNav.dart';
@@ -20,8 +26,49 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final FlutterLocalization _localization = FlutterLocalization.instance;
+
+  @override
+  void initState() {
+    _configureLocalization(); // Call the method to configure localization
+    super.initState();
+  }
+
+  void _configureLocalization() {
+    _localization.init(
+      mapLocales: [
+        const MapLocale(
+          'en',
+          AppLocale.EN,
+          countryCode: 'US',
+        ),
+        const MapLocale(
+          'km',
+          AppLocale.KM,
+          countryCode: 'KH',
+        ),
+        const MapLocale(
+          'ja',
+          AppLocale.JA,
+          countryCode: 'JP',
+        ),
+      ],
+      initLanguageCode: 'en',
+    );
+    _localization.onTranslatedLanguage = _onTranslatedLanguage;
+  }
+
+  void _onTranslatedLanguage(Locale? locale) {
+    setState(() {});
+  }
 
   // This widget is the root of your application.
   @override
@@ -30,12 +77,14 @@ class MyApp extends StatelessWidget {
       title: 'Auto Pro',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      supportedLocales: _localization.supportedLocales,
+      localizationsDelegates: _localization.localizationsDelegates,
+      home: (FirebaseAuth.instance.currentUser != null)
+          ? HomeWel()
+          : LoginPage(),
     );
   }
 }
@@ -50,11 +99,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Simulate a delay to show the splash screen for a few seconds
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 2), () {
       // Navigate to the main screen after the splash screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => purpleScreen()),
+        MaterialPageRoute(builder: (context) => PurpleScreen()),
       );
     });
   }
@@ -72,30 +121,32 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Text(
                 'Auto Pro',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ), // Replace with your splash screen content
+        ),
       ),
     );
   }
 }
 
-class purpleScreen extends StatefulWidget {
-  const purpleScreen({super.key});
+class PurpleScreen extends StatefulWidget {
+  const PurpleScreen({super.key});
 
   @override
-  State<purpleScreen> createState() => _purpleScreenState();
+  State<PurpleScreen> createState() => _PurpleScreenState();
 }
 
-class _purpleScreenState extends State<purpleScreen> {
+class _PurpleScreenState extends State<PurpleScreen> {
+  @override
   void initState() {
     super.initState();
     // Simulate a delay to show the splash screen for a few seconds
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 1), () {
       // Navigate to the main screen after the splash screen
       Navigator.pushReplacement(
         context,
@@ -110,4 +161,22 @@ class _purpleScreenState extends State<purpleScreen> {
       backgroundColor: Color(0xFF4537DD),
     );
   }
+}
+
+mixin AppLocale {
+  static const String title = 'title';
+  static const String thisIs = 'thisIs';
+
+  static const Map<String, dynamic> EN = {
+    title: 'Localization',
+    thisIs: 'Welcome Sir ,.',
+  };
+  static const Map<String, dynamic> KM = {
+    title: 'ការធ្វើមូលដ្ឋានីយកម្ម',
+    thisIs: 'នេះគឺជាកញ្ចប់%a កំណែ%a.',
+  };
+  static const Map<String, dynamic> JA = {
+    title: 'ローカリゼーション',
+    thisIs: 'これは%aパッケージ、バージョン%aです。',
+  };
 }

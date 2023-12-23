@@ -64,6 +64,7 @@ class WelcomePage extends StatelessWidget {
                 width: 260,
                 decoration: BoxDecoration(
                   color: Color(0xff4537DD),
+                   borderRadius: BorderRadius.circular(11)
                 ),
                 child: TextButton(
                     onPressed: () {

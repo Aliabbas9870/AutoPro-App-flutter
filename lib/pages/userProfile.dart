@@ -69,6 +69,7 @@ class UserProfile extends StatelessWidget {
             Container(
                 width: 260,
                 decoration: BoxDecoration(
+                   borderRadius: BorderRadius.circular(11),
                   color: Color(0xff4537DD),
                 ),
                 child: TextButton(

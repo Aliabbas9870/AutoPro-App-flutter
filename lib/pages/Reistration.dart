@@ -1,11 +1,18 @@
 import 'dart:math';
+import 'package:autoprocfinal/pages/SettingPage.dart';
+import 'package:autoprocfinal/pages/WlHome.dart';
+import 'package:autoprocfinal/pages/mainHomePage.dart';
+import 'package:autoprocfinal/pages/welcomePage.dart';
+import 'package:autoprocfinal/phone/phoneSign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:get/get.dart';
 import 'package:autoprocfinal/pages/add_country_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -14,13 +21,49 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-   
   TextEditingController userController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController cfpassController = TextEditingController();
 
+  TextEditingController cfpassController = TextEditingController();
+  bool success = false;
   final GlobalKey<FormState> _formeKey = GlobalKey<FormState>();
+
+  void createAccount() async {
+    String name = userController.text.trim();
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    String cpassword = cfpassController.text.trim();
+
+    if (name == '' || email == '' || password == '' || cpassword == '') {
+      AlertDialog(
+        title: Text('Please Fill all Field'),
+      );
+    } else if (password != cpassword) {
+      AlertDialog(
+        title: Text('Password Not Matech'),
+      );
+    } else {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        AlertDialog(
+          title: Text('Congrats'),
+        );
+        if (userCredential != null) {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>selectCountry()));
+          AlertDialog();
+        }
+      } on FirebaseAuthException catch (ex) {
+        AlertDialog(
+          title: Text('Error'),
+          content: Text(ex.code.toString()),
+        );
+      }
+    }
+  }
+
+  // bool success = false;
 //////////////////
   ///
   ///
@@ -58,7 +101,6 @@ class _RegisterPageState extends State<RegisterPage> {
     }
     return null;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -105,12 +147,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: TextFormField(
                       controller: userController,
                       keyboardType: TextInputType.name,
-                       validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please Enter Name";
-                      }
-                      return null;
-                    },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please Enter Name";
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                           label: Text("Full Name"),
                           hintText: "Enter Your Full Name",
@@ -125,11 +167,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
-                     keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.emailAddress,
                     validator: _validateEmail,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: emailController,
-                   
                     decoration: InputDecoration(
                         label: Text("Email-Address"),
                         hintText: 'Enter Your Email',
@@ -152,6 +193,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: success ? Colors.green : Colors.red,
+
+                              // borderSide: BorderSide(
+
+                              width: 2),
+                          borderRadius: BorderRadius.circular(45),
+                        ),
                         label: Text("Password"),
                         hintText: "Enter Your Password",
                         border: OutlineInputBorder(
@@ -161,6 +211,30 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(
                   height: 12,
                 ),
+
+                // FlutterPwValidator(
+                //   defaultColor: Colors.grey.shade300,
+                //   controller: passwordController,
+                //   successColor: Colors.green.shade700,
+                //   minLength: 8,
+                //   uppercaseCharCount: 2,
+                //   numericCharCount: 3,
+                //   specialCharCount: 1,
+                //   normalCharCount: 3,
+                //   width: 344,
+                //   height: 212,
+                //   onSuccess: () {
+                //     setState(() {
+                //       success = true;
+                //     });
+                //   },
+                //   onFail: () {
+                //     setState(() {
+                //       success = false;
+                //     });
+                //   },
+                // ),
+
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
@@ -170,72 +244,67 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                         label: Text("Confirm Password"),
                         hintText: 'Confirm your Password',
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: success ? Colors.green : Colors.red,
+
+                              // borderSide: BorderSide(
+
+                              width: 2),
+                          borderRadius: BorderRadius.circular(45),
+                        ),
                         border: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2),
                             borderRadius: BorderRadius.circular(47))),
                   ),
                 ),
                 SizedBox(
+                  height: 5,
+                ),
+                FlutterPwValidator(
+                  defaultColor: Colors.grey.shade300,
+                  controller: passwordController,
+                  successColor: Colors.green.shade700,
+                  minLength: 8,
+                  uppercaseCharCount: 2,
+                  numericCharCount: 3,
+                  specialCharCount: 1,
+                  normalCharCount: 3,
+                  width: 324,
+                  height: 200,
+                  onSuccess: () {
+                    setState(() {
+                      success = true;
+                    });
+                  },
+                  onFail: () {
+                    setState(() {
+                      success = false;
+                    });
+                  },
+                ),
+                SizedBox(
                   height: 42,
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      var username = userController.text.trim();
-                      var useremail = emailController.text.trim();
-                      var userpass = passwordController.text.trim();
-                      var usercfpass = cfpassController.text.trim();
-                      FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: useremail, password: userpass)
-                          .then((value) => {
-                          print(username),
-                           print(userpass),
-                            print(useremail),
-                          FirebaseFirestore.instance.collection('UsersRegister').doc().set({
-                            'username':username,
-                            'useremail':useremail,
-                            'userpass':userpass,
-                            'usercfpass':usercfpass
-                          }),
+                Container(
+                  width: 325,
+                  height: 55,
+                  decoration: BoxDecoration(
+                      color: Color(0xff4537DD),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: TextButton(
+                      onPressed: () {
+                        createAccount();
+                      },
+                      child: Text(
+                        "Register",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
 
-                  
-                                // print("Created Users Register"),
-                              });
-                              
-                    },
-                    child: Text("Register")),
-                // Padding(
-                //   padding: const EdgeInsets.only(bottom: 52.0),
-                //   child: Container(
-                //       width: 305,
-                //       color: Color(0xff4537DD),
-                //       child: TextButton(
-                //           onPressed: () {},
-                //           child: InkWell(
-                //             onTap: () {
-                //               // var username = userController.text.trim();
-                //               // var useremail = emailController.text.trim();
-                //               // var userpass = passwordController.text.trim();
-                //               // var usercfpass = cfpassController.text.trim();
-                //               // FirebaseAuth.instance
-                //               //     .createUserWithEmailAndPassword(
-                //               //         email: useremail, password: userpass ).then((value) => {
-
-                //               //         print("Created Users Register"),
-                //               //         log('users')
-                //               //         });
-
-                //               // Navigator.push(
-                //               //     context,
-                //               //     MaterialPageRoute(
-                //               //         builder: (context) => RegisterPage()));
-                //             },
-                //             child: Text("Register",
-                //                 style: TextStyle(
-                //                     fontSize: 16,
-                //                     color: Colors.white,
-                //                     fontWeight: FontWeight.bold)),
-                //           ))),
-                // ),
                 SizedBox(
                   height: 2,
                 ),
@@ -254,6 +323,17 @@ class _RegisterPageState extends State<RegisterPage> {
                           " Sign in",
                           style: TextStyle(color: Colors.blue),
                         )),
+                         TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PhoneAuthScreen()));
+                        },
+                        child: Text(
+                          " SignIn Phone",
+                          style: TextStyle(color: Colors.blue),
+                        )),
                   ],
                 )
               ],
@@ -265,9 +345,58 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
+  void login() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    if (email == ' ' || password == ' ') {
+      print('please fill');
+      AlertDialog(
+        title: Text('Please Fill the line'),
+      );
+    } else {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+             AlertDialog(
+          title: Text('done'),
+        );
+        if (userCredential != null) {
+        
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeWel()));
+        }
+      } on FirebaseAuthException catch (ex) {
+        print(ex.code.toString());
+        AlertDialog(
+          title: Text('Please Fill the line'),
+        );
+      }
+    }
+  }
+
+  String? _validateEmail(value) {
+    if (value!.isEmpty) {
+      return "Please Enter Email";
+    }
+    RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}');
+    if (!emailRegExp.hasMatch(value)) {
+      return "please Enter Valid Email";
+    }
+    return null;
+  }
+
+  bool success = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -275,7 +404,7 @@ class LoginPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(children: [
           SizedBox(
-            height: 114,
+            height: 24,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 88.0),
@@ -287,7 +416,7 @@ class LoginPage extends StatelessWidget {
             ))),
           ),
           SizedBox(
-            height: 32,
+            height: 12,
           ),
           Container(
             width: 280,
@@ -303,10 +432,15 @@ class LoginPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
+                    validator: _validateEmail,
+                    controller: emailController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                         label: Text("Email-Address"),
                         hintText: 'Enter Your Email',
                         border: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2),
                             borderRadius: BorderRadius.circular(47))),
                   ),
                 ),
@@ -316,8 +450,15 @@ class LoginPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: success ? Colors.green : Colors.red,
+                              width: 2),
+                          borderRadius: BorderRadius.circular(47),
+                        ),
                         label: Text("Password"),
                         hintText: "Enter Your Password",
                         border: OutlineInputBorder(
@@ -325,21 +466,50 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 42,
+                  height: 6,
+                ),
+                FlutterPwValidator(
+                  defaultColor: Colors.grey.shade300,
+                  controller: passwordController,
+                  successColor: Colors.green.shade700,
+                  minLength: 8,
+                  uppercaseCharCount: 2,
+                  numericCharCount: 3,
+                  specialCharCount: 1,
+                  normalCharCount: 3,
+                  width: 324,
+                  height: 200,
+                  onSuccess: () {
+                    setState(() {
+                      success = true;
+                    });
+                  },
+                  onFail: () {
+                    setState(() {
+                      success = false;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 12,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 52.0),
                   child: Container(
                       width: 305,
-                      color: Color(0xff4537DD),
+                      decoration: BoxDecoration(
+                          color: Color(0xff4537DD),
+                          borderRadius: BorderRadius.circular(12)),
                       child: TextButton(
                           onPressed: () {},
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => selectCountry()));
+                              login();
+                              // Navigator.push(
+
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => selectCountry()));
                             },
                             child: Text("Login",
                                 style: TextStyle(
@@ -347,9 +517,6 @@ class LoginPage extends StatelessWidget {
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold)),
                           ))),
-                ),
-                SizedBox(
-                  height: 2,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
