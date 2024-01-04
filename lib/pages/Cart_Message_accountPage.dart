@@ -1,4 +1,5 @@
 import 'package:autoprocfinal/help/addNavigate.dart';
+import 'package:autoprocfinal/operations/formPage.dart';
 import 'package:autoprocfinal/pages/RatingReviewPage.dart';
 import 'package:autoprocfinal/pages/SettingPage.dart';
 import 'package:autoprocfinal/pages/allScreenPage.dart';
@@ -15,6 +16,11 @@ class CartScreen extends StatelessWidget {
           'Cart',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>OperationPage()));
+          }, icon: Icon(Icons.edit_note_sharp))
+        ],
       ),
       body: Column(children: [
         Row(
@@ -351,7 +357,7 @@ class AccountsScreen extends StatelessWidget {
                               IconButton(
                                   onPressed: () {
                                     Navigator.push(
-                                        context,
+                                      context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 ToShipPage()));
@@ -493,18 +499,23 @@ class AccountsScreen extends StatelessWidget {
                               SizedBox(
                                 width: 22,
                               ),
-                              Row(
-                                children: [
-                                  Icon(Icons.favorite),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    "My Favourits",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                              GestureDetector(
+                                onTap: (){
+                                  _showSnackBar(context);
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.favorite),
+                                    SizedBox(
+                                      width: 12,
+                                    ),
+                                    Text(
+                                      "My Favourits",
+                                      style:
+                                          TextStyle(fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -544,18 +555,23 @@ class AccountsScreen extends StatelessWidget {
                               SizedBox(
                                 width: 22,
                               ),
-                              Row(
-                                children: [
-                                  Icon(Icons.help_center_outlined),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    "Help Centre",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                              GestureDetector(
+                                onTap: (){
+                                  _showSnackBar(context);
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.help_center_outlined),
+                                    SizedBox(
+                                      width: 12,
+                                    ),
+                                    Text(
+                                      "Help Centre",
+                                      style:
+                                          TextStyle(fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -571,4 +587,30 @@ class AccountsScreen extends StatelessWidget {
       ),
     );
   }
+
+  
+
+
+
+
+  
+  void _showSnackBar(BuildContext context) {
+    // Create a SnackBar
+    final snackBar = SnackBar(
+      content: Text('Page Not Availabe Now ! Sorry'),
+      duration: Duration(seconds: 3), // Optional: Set the duration
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          // Perform some action when the "Undo" button is pressed
+          // For example, you can undo the user's previous action
+          print('Undo button pressed');
+        },
+      ),
+    );
+
+    // Show the SnackBar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
 }

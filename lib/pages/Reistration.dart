@@ -29,7 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool success = false;
   final GlobalKey<FormState> _formeKey = GlobalKey<FormState>();
 
-  void createAccount() async {
+   void createAccount() async {
     String name = userController.text.trim();
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
@@ -51,7 +51,8 @@ class _RegisterPageState extends State<RegisterPage> {
           title: Text('Congrats'),
         );
         if (userCredential != null) {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>selectCountry()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => selectCountry()));
           AlertDialog();
         }
       } on FirebaseAuthException catch (ex) {
@@ -102,6 +103,9 @@ class _RegisterPageState extends State<RegisterPage> {
     return null;
   }
 
+
+bool passVis=true;
+bool passVis1=true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,6 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                       decoration: InputDecoration(
                           label: Text("Full Name"),
+                          suffixIcon: Icon(Icons.person),
                           hintText: "Enter Your Full Name",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(47))),
@@ -171,9 +176,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     validator: _validateEmail,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: emailController,
+                    
                     decoration: InputDecoration(
                         label: Text("Email-Address"),
+                        suffixIcon: Icon(Icons.email),
+                        
                         hintText: 'Enter Your Email',
+                        
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(47))),
                   ),
@@ -191,9 +200,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                     controller: passwordController,
-                    obscureText: true,
+                    obscureText: passVis1,
+                    
                     decoration: InputDecoration(
+                      
                         focusedBorder: OutlineInputBorder(
+                          
+                          
                           borderSide: BorderSide(
                               color: success ? Colors.green : Colors.red,
 
@@ -203,6 +216,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(45),
                         ),
                         label: Text("Password"),
+                         suffixIcon: IconButton(icon: passVis1?Icon(Icons.visibility_off):Icon(Icons.visibility),onPressed: () => {setState(() {
+                        passVis1=!passVis1;
+                      },)},),
                         hintText: "Enter Your Password",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(47))),
@@ -239,9 +255,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
                     controller: cfpassController,
-                    obscureText: true,
+                    obscureText: passVis,
                     keyboardType: TextInputType.text,
+                    
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(icon: passVis?Icon(Icons.visibility_off):Icon(Icons.visibility),onPressed: () => {setState(() {
+                        passVis=!passVis;
+                      },)},),
                         label: Text("Confirm Password"),
                         hintText: 'Confirm your Password',
                         focusedBorder: OutlineInputBorder(
@@ -323,7 +343,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           " Sign in",
                           style: TextStyle(color: Colors.blue),
                         )),
-                         TextButton(
+                    TextButton(
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -353,6 +373,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool passVis = true;
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
@@ -368,11 +389,10 @@ class _LoginPageState extends State<LoginPage> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-             AlertDialog(
+        AlertDialog(
           title: Text('done'),
         );
         if (userCredential != null) {
-        
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => HomeWel()));
         }
@@ -438,6 +458,7 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                         label: Text("Email-Address"),
+                           suffixIcon: Icon(Icons.email),
                         hintText: 'Enter Your Email',
                         border: OutlineInputBorder(
                             borderSide: BorderSide(width: 2),
@@ -451,8 +472,18 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.only(left: 12.0, right: 12),
                   child: TextFormField(
                     controller: passwordController,
-                    obscureText: true,
+                    obscureText: passVis,
                     decoration: InputDecoration(
+                       suffixIcon: IconButton(onPressed: ()=>
+                        {
+                          setState(() {
+                            passVis=!passVis;
+                          })
+                        
+  },
+                       icon:passVis
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility)),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: success ? Colors.green : Colors.red,

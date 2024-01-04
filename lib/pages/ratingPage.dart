@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:d_chart/d_chart.dart';
 
 
 class RatingPage extends StatefulWidget {
@@ -27,7 +27,8 @@ class _RatingPageState extends State<RatingPage> {
         children: [
           Container(
             child: ElevatedButton(onPressed: show, child: Text("Rating Page")),
-          )
+          ),
+
         ],
       ),
     );
